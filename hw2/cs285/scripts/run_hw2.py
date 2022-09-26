@@ -64,9 +64,9 @@ def main():
     parser.add_argument('--nn_baseline', action='store_true')
     parser.add_argument('--gae_lambda', type=float, default=None)
     parser.add_argument('--dont_standardize_advantages', '-dsa', action='store_true')
-    parser.add_argument('--batch_size', '-b', type=int, default=1000) #steps collected per train iteration
-    parser.add_argument('--eval_batch_size', '-eb', type=int, default=400) #steps collected per eval iteration
-    parser.add_argument('--train_batch_size', '-tb', type=int, default=1000) ##steps used per gradient step
+    parser.add_argument('--batch_size', '-b', type=int, default=1000)  # steps collected per train iteration
+    parser.add_argument('--eval_batch_size', '-eb', type=int, default=400)  # steps collected per eval iteration
+    parser.add_argument('--train_batch_size', '-tb', type=int, default=1000)  ##steps used per gradient step
 
     parser.add_argument('--num_agent_train_steps_per_iter', type=int, default=1)
     parser.add_argument('--discount', type=float, default=1.0)
@@ -74,7 +74,7 @@ def main():
     parser.add_argument('--n_layers', '-l', type=int, default=2)
     parser.add_argument('--size', '-s', type=int, default=64)
 
-    parser.add_argument('--ep_len', type=int) #students shouldn't change this away from env's default
+    parser.add_argument('--ep_len', type=int)  # students shouldn't change this away from env's default
     parser.add_argument('--seed', type=int, default=1)
     parser.add_argument('--no_gpu', '-ngpu', action='store_true')
     parser.add_argument('--which_gpu', '-gpu_id', default=0)

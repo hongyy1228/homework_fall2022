@@ -6,6 +6,7 @@ from cs285.agents.bc_agent import BCAgent
 from cs285.policies.loaded_gaussian_policy import LoadedGaussianPolicy
 from cs285.infrastructure.utils import MJ_ENV_KWARGS, MJ_ENV_NAMES
 
+import matplotlib.pyplot as plt
 class BC_Trainer(object):
 
     def __init__(self, params):
@@ -30,8 +31,11 @@ class BC_Trainer(object):
         ################
         ## RL TRAINER
         ################
-
+        self.params['tracking'] = []  # to keep track of the loop for 1.3
+        self.params['trainTracking'] = []
         self.rl_trainer = RL_Trainer(self.params) ## HW1: you will modify this
+
+
 
         #######################
         ## LOAD EXPERT POLICY
@@ -56,27 +60,27 @@ class BC_Trainer(object):
 def main():
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--expert_policy_file', '-epf', type=str, required=True)  # relative to where you're running this script from
-    parser.add_argument('--expert_data', '-ed', type=str, required=True) #relative to where you're running this script from
-    parser.add_argument('--env_name', '-env', type=str, help=f'choices: {", ".join(MJ_ENV_NAMES)}', required=True)
-    parser.add_argument('--exp_name', '-exp', type=str, default='pick an experiment name', required=True)
+    parser.add_argument('--expert_policy_file', '-epf', type=str, default='F:\PhDClasses\cs285\homework_fall2022\hw1\cs285\policies\experts\Walker2d.pkl')  # relative to where you're running this script from
+    parser.add_argument('--expert_data', '-ed', type=str, default='F:\PhDClasses\cs285\homework_fall2022\hw1\cs285\expert_data\expert_data_Walker2d-v4.pkl') #relative to where you're running this script from
+    parser.add_argument('--env_name', '-env', type=str, help=f'choices: {", ".join(MJ_ENV_NAMES)}', default='Walker2d-v4')
+    parser.add_argument('--exp_name', '-exp', type=str, default='dagger_walker')
     parser.add_argument('--do_dagger', action='store_true')
     parser.add_argument('--ep_len', type=int)
 
     parser.add_argument('--num_agent_train_steps_per_iter', type=int, default=1000)  # number of gradient steps for training policy (per iter in n_iter)
-    parser.add_argument('--n_iter', '-n', type=int, default=1)
+    parser.add_argument('--n_iter', '-n', type=int, default=10)
 
     parser.add_argument('--batch_size', type=int, default=1000)  # training data collected (in the env) during each iteration
     parser.add_argument('--eval_batch_size', type=int,
-                        default=1000)  # eval data collected (in the env) for logging metrics
+                        default=5000)  # eval data collected (in the env) for logging metrics
     parser.add_argument('--train_batch_size', type=int,
                         default=100)  # number of sampled data points to be used per gradient/train step
 
     parser.add_argument('--n_layers', type=int, default=2)  # depth, of policy to be learned
-    parser.add_argument('--size', type=int, default=64)  # width of each layer, of policy to be learned
+    parser.add_argument('--size', type=int, default=128)  # width of each layer, of policy to be learned
     parser.add_argument('--learning_rate', '-lr', type=float, default=5e-3)  # LR for supervised learning
 
-    parser.add_argument('--video_log_freq', type=int, default=5)
+    parser.add_argument('--video_log_freq', type=int, default=-1)
     parser.add_argument('--scalar_log_freq', type=int, default=1)
     parser.add_argument('--no_gpu', '-ngpu', action='store_true')
     parser.add_argument('--which_gpu', type=int, default=0)
@@ -91,7 +95,7 @@ def main():
     ##################################
     ### CREATE DIRECTORY FOR LOGGING
     ##################################
-
+    args.do_dagger = 1
     if args.do_dagger:
         # Use this prefix when submitting. The auto-grader uses this prefix.
         logdir_prefix = 'q2_'
@@ -119,5 +123,12 @@ def main():
     trainer = BC_Trainer(params)
     trainer.run_training_loop()
 
+    #for 1.3 loop
+    #trainReturn = 4713
+    #for i in range(100, 2000, 100):
+     #   params['ep_len'] = i
+      #  trainer = BC_Trainer(params)
+       # trainer.run_training_loop()
+#
 if __name__ == "__main__":
     main()
